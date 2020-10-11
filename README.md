@@ -1,5 +1,7 @@
 # Skrap
 
+![build](https://github.com/cgerling/skrap/workflows/build/badge.svg)
+
 Scrap data from manga scanlation hosts.
 
 ## Installation
