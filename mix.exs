@@ -20,7 +20,8 @@ defmodule Skrap.MixProject do
   defp deps do
     [
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:excoveralls, "~> 0.13.2", only: :test}
     ]
   end
 end
