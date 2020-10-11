@@ -1,0 +1,76 @@
+name: build
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: elixir:1.10-slim
+    steps:
+      - name: Setup
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+      - uses: actions/checkout@v2
+      - name: Cache Build
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-build-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          restore-keys: ${{ runner.os}}-build-
+          path: |
+            ~/.mix
+            ./_build
+            ./deps
+      - name: Fetch Dependencies
+        run: mix deps.get
+      - name: Compile
+        run: mix compile --warning-as-errors
+
+  code-analysis:
+    runs-on: ubuntu-latest
+    container:
+      image: elixir:1.10-slim
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Build
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-build-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          restore-keys: ${{ runner.os}}-build-
+          path: |
+            ~/.mix
+            ./_build
+            ./deps
+      - name: Cache PLTs
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-build-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          restore-keys: ${{ runner.os}}-build-
+          path: ./priv/plts
+      - name: Check Format
+        run: mix format --check-formatted
+      - name: Run Credo
+        run: mix credo
+      - name: Run Dialyzer
+        run: mix dialyzer
+
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: elixir:1.10-slim
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Build
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-build-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          restore-keys: ${{ runner.os}}-build-
+          path: |
+            ~/.mix
+            ./_build
+            ./deps
+      - name: Run Tests
+        run: mix coveralls
