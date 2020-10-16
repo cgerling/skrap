@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: elixir:1.10-slim
+      image: hexpm/elixir:1.11.1-erlang-23.1.1-ubuntu-focal-20200703
     steps:
       - name: Setup
         run: |
@@ -30,7 +30,7 @@ jobs:
   code-analysis:
     runs-on: ubuntu-latest
     container:
-      image: elixir:1.10-slim
+      image: hexpm/elixir:1.11.1-erlang-23.1.1-ubuntu-focal-20200703
     needs: build
     steps:
       - uses: actions/checkout@v2
@@ -59,7 +59,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: elixir:1.10-slim
+      image: hexpm/elixir:1.11.1-erlang-23.1.1-ubuntu-focal-20200703
     needs: build
     steps:
       - uses: actions/checkout@v2
