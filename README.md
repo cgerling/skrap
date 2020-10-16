@@ -1,6 +1,9 @@
 # Skrap
 
-![build](https://github.com/cgerling/skrap/workflows/build/badge.svg)
+[![ci][build-badge]][build-status-url]
+
+[build-badge]: https://github.com/cgerling/skrap/workflows/ci/badge.svg
+[build-status-url]: https://github.com/cgerling/skrap/actions?workflow=ci
 
 Scrap data from manga scanlation hosts.
 
