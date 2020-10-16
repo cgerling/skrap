@@ -16,11 +16,6 @@ defmodule Skrap.Fetchers.Parser do
 
   @invalid_field_values [nil, ""]
 
-  @spec parse_html(String.t()) :: ok(Floki.html_tree()) | error(String.t())
-  def parse_html(document) when is_binary(document) do
-    Floki.parse_document(document)
-  end
-
   @spec validate_field({atom(), maybe_string()}) :: ok(String.t()) | error({atom(), atom()})
   def validate_field({field, value}) when value in @invalid_field_values,
     do: {:error, {field, :field_not_found}}

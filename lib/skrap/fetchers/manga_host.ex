@@ -6,8 +6,7 @@ defmodule Skrap.Fetchers.MangaHost do
 
   def manga(id) when is_binary(id) do
     with {:ok, response} <- MangaHostClient.manga(id),
-         {:ok, document} <- Parser.parse_html(response.body),
-         {:ok, manga} <- MangaHostParser.manga(document) do
+         {:ok, manga} <- MangaHostParser.manga(response.body) do
       {:ok, %Manga{manga | id: id}}
     end
   end
