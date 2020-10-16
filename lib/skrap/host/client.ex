@@ -1,4 +1,4 @@
-defmodule Skrap.Fetchers.Client do
+defmodule Skrap.Host.Client do
   @moduledoc """
   A behavior module for defining Skrap Clients.
 
@@ -18,7 +18,7 @@ defmodule Skrap.Fetchers.Client do
 
       plug Tesla.Middleware.BaseUrl, @hostname
 
-      @behaviour Skrap.Fetchers.Client
+      @behaviour Skrap.Host.Client
 
       def hostname, do: @hostname
     end

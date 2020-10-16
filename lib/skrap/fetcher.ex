@@ -1,4 +1,4 @@
-defmodule Skrap.Fetchers.Fetcher do
+defmodule Skrap.Fetcher do
   @moduledoc """
   A behavior module for defining a fetcher for a specific host.
 

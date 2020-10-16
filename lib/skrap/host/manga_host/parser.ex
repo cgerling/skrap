@@ -1,6 +1,6 @@
-defmodule Skrap.Fetchers.MangaHostParser do
+defmodule Skrap.Host.MangaHost.Parser do
   alias Skrap.Content.Manga
-  alias Skrap.Fetchers.Parser
+  alias Skrap.Host.Parser
 
   @behaviour Parser
 

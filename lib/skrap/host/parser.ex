@@ -1,4 +1,4 @@
-defmodule Skrap.Fetchers.Parser do
+defmodule Skrap.Host.Parser do
   @moduledoc """
   A behaviour module for defining Skrap Parsers.
 
