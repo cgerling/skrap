@@ -28,6 +28,7 @@ defmodule Skrap.MixProject do
       {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:excoveralls, "~> 0.13.2", only: :test},
+      {:faker, "~> 0.15", only: :test},
       {:floki, "~> 0.29.0"},
       {:hackney, "~> 1.16.0"},
       {:tesla, "~> 1.3.0"}
