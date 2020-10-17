@@ -8,6 +8,10 @@ defmodule Skrap.MixProject do
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      dialyzer: [
+        force_check: true,
+        plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
+      ],
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [coveralls: :test]
     ]
