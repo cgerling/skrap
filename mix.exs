@@ -6,6 +6,7 @@ defmodule Skrap.MixProject do
       app: :skrap,
       version: "0.1.0",
       elixir: "~> 1.10",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       dialyzer: [
@@ -16,6 +17,9 @@ defmodule Skrap.MixProject do
       preferred_cli_env: [coveralls: :test]
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   def application do
     [
