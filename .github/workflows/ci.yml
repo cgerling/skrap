@@ -72,5 +72,12 @@ jobs:
             ~/.mix
             ./_build
             ./deps
+      - name: Cache Test
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-test-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          restore-keys: ${{ runner.os}}-test-
+          path: |
+            ./_build
       - name: Run Tests
         run: mix coveralls
