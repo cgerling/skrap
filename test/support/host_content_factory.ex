@@ -1,5 +1,5 @@
 defmodule Skrap.Factory.HostContent do
-  alias Faker.{Internet, Person, Superhero}
+  alias Faker.{Date, Internet, Person, Superhero, UUID}
 
   def manga_host(:manga, opts \\ []) do
     author = Keyword.get_lazy(opts, :author, &Person.name/0)
@@ -72,6 +72,67 @@ defmodule Skrap.Factory.HostContent do
         name: name
       },
       content: content
+    }
+  end
+
+  def manga_host(:chapter, opts \\ []) do
+    random_date_fn = fn -> 1000 |> :rand.uniform() |> Date.backward() end
+    name_prefix = "Capítulo "
+
+    added_at = Keyword.get_lazy(opts, :added_at, random_date_fn)
+    id = Keyword.get_lazy(opts, :id, &UUID.v4/0)
+    name = Keyword.get(opts, :name, name_prefix <> id)
+    uri = Keyword.get_lazy(opts, :uri, &Internet.url/0)
+
+    formatted_added_at = Calendar.strftime(added_at, "%b %0d, %Y")
+
+    content = [
+      {"div", [{"id", "pop-#{id}"}, {"class", "cap"}],
+       [
+         {"div", [{"class", "card pop"}],
+          [
+            {"div", [{"class", "pop-title"}],
+             [name_prefix, {"span", [{"class", "btn-caps"}], [id]}]},
+            {"div", [{"class", "pop-content"}],
+             [
+               {"small", [{"class", "clearfix"}],
+                [
+                  "Traduzido por ",
+                  {"strong", [], [Person.name()]},
+                  {"br", [], []},
+                  "\nAdicionado em #{formatted_added_at}"
+                ]},
+               {"div", [{"class", "tags"}],
+                [
+                  {"a",
+                   [
+                     {"href", uri},
+                     {"title", "Ler Online - #{name} []"},
+                     {"class", "btn-green w-button pull-left"}
+                   ], [{"i", [{"class", "icon-file"}], []}, " Ler Online"]}
+                ]}
+             ]}
+          ]},
+         {"a",
+          [
+            {"class", "btn-caps w-button"},
+            {"rel", "popover"},
+            {"href", "javascript:void(0)"},
+            {"data-pop", "#pop-#{id}"},
+            {"id", id},
+            {"title", name}
+          ], [id]}
+       ]}
+    ]
+
+    %{
+      content: content,
+      data: %{
+        added_at: added_at,
+        id: id,
+        name: name,
+        uri: uri
+      }
     }
   end
 end
