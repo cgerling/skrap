@@ -13,7 +13,7 @@ defmodule Skrap.Host.Parser do
   @type maybe_string :: String.t() | nil
 
   @callback manga(Floki.html_tree()) :: ok(Manga.t()) | error
-  @callback chapters(Floki.html_tree()) :: list(Chapter.t())
+  @callback summary(Floki.html_tree()) :: list(Chapter.t())
   @callback chapter(Floki.html_node()) :: ok(Chapter.t()) | error
 
   @invalid_field_values [nil, ""]
