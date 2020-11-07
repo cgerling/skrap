@@ -137,4 +137,29 @@ defmodule Skrap.Factory.HostContent do
       }
     }
   end
+
+  def manga_host(:summary, opts) do
+    random_length_fn = fn -> :rand.uniform(10) end
+
+    random_chapters_length = Keyword.get_lazy(opts, :length, random_length_fn)
+    chapters = Keyword.get(opts, :chapters, [])
+
+    random_chapters =
+      1..random_chapters_length
+      |> Enum.to_list()
+      |> Enum.map(fn _ -> manga_host(:chapter) end)
+      |> Enum.flat_map(& &1.content)
+
+    chapters_content = random_chapters ++ chapters
+
+    content = [{"div", [{"class", "chapters"}], chapters_content}]
+    length = Enum.count(random_chapters) + Enum.count(chapters)
+
+    %{
+      content: content,
+      data: %{
+        length: length
+      }
+    }
+  end
 end
