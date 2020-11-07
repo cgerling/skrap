@@ -1,5 +1,6 @@
 defmodule Skrap.Host.MangaHost.Parser do
-  alias Skrap.Content.Manga
+  alias Skrap.Content.{Chapter, Manga}
+  alias Skrap.DateHelper
   alias Skrap.Host.Parser
 
   @behaviour Parser
@@ -55,5 +56,70 @@ defmodule Skrap.Host.MangaHost.Parser do
       |> Floki.text(deep: false)
 
     Parser.validate_field({:name, name})
+  end
+
+  def chapter(html_node) do
+    with {:ok, added_at} <- get_added_at(html_node),
+         {:ok, id} <- get_chapter_id(html_node),
+         {:ok, name} <- get_chapter_name(html_node),
+         {:ok, uri} <- get_chapter_uri(html_node) do
+      chapter = %Chapter{
+        added_at: added_at,
+        id: id,
+        name: name,
+        uri: uri
+      }
+
+      {:ok, chapter}
+    end
+  end
+
+  defp get_added_at(html_node) do
+    added_at_text =
+      html_node
+      |> Floki.find(".card.pop .pop-content > small")
+      |> Floki.text(deep: false)
+
+    added_at_readable_date =
+      added_at_text
+      |> String.split(" ")
+      |> Enum.take(-3)
+      |> Enum.join(" ")
+
+    case DateHelper.parse_readable_date(added_at_readable_date) do
+      {:ok, %Date{} = date} -> {:ok, date}
+      {:error, reason} -> {:error, {:added_at, reason}}
+    end
+  end
+
+  defp get_chapter_id(html_node) do
+    id =
+      html_node
+      |> Floki.find(".card.pop .pop-title > span")
+      |> Floki.text(deep: false)
+      |> String.trim()
+
+    Parser.validate_field({:id, id})
+  end
+
+  defp get_chapter_name(html_node) do
+    name =
+      html_node
+      |> Floki.find("a[data-pop]")
+      |> Floki.attribute("title")
+      |> List.first()
+      |> String.trim()
+
+    Parser.validate_field({:name, name})
+  end
+
+  defp get_chapter_uri(html_node) do
+    uri =
+      html_node
+      |> Floki.find(".card.pop .pop-content > .tags > a")
+      |> Floki.attribute("href")
+      |> List.first()
+
+    Parser.validate_field({:uri, uri})
   end
 end

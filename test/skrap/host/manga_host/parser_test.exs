@@ -1,7 +1,7 @@
 defmodule Skrap.Host.MangaHost.ParserTest do
   use ExUnit.Case, async: true
 
-  alias Skrap.Content.Manga
+  alias Skrap.Content.{Chapter, Manga}
   alias Skrap.Host.MangaHost.Parser
 
   alias Skrap.Factory.HostContent
@@ -20,6 +20,23 @@ defmodule Skrap.Host.MangaHost.ParserTest do
     test "returns an error with a reason when some information could not be parsed" do
       empty_html_tree = []
       assert {:error, {:cover_url, :field_not_found}} == Parser.manga(empty_html_tree)
+    end
+  end
+
+  describe "chapter/1" do
+    test "returns ok with all parsed information" do
+      %{data: data, content: content} = HostContent.manga_host(:chapter)
+
+      assert {:ok, %Chapter{} = chapter} = Parser.chapter(content)
+      assert chapter.added_at == data.added_at
+      assert chapter.id == data.id
+      assert chapter.name == data.name
+      assert chapter.uri == data.uri
+    end
+
+    test "returns and error with a reason when some information could not be parsed" do
+      empty_html_tree = []
+      assert {:error, {:added_at, :invalid_date_format}} == Parser.chapter(empty_html_tree)
     end
   end
 end
