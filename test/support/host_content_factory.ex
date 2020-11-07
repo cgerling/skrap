@@ -1,7 +1,9 @@
 defmodule Skrap.Factory.HostContent do
   alias Faker.{Date, Internet, Person, Superhero, UUID}
 
-  def manga_host(:manga, opts \\ []) do
+  def manga_host(resource, opts \\ [])
+
+  def manga_host(:manga, opts) do
     author = Keyword.get_lazy(opts, :author, &Person.name/0)
     cover_url = Keyword.get_lazy(opts, :cover_url, &Internet.image_url/0)
     illustrator = Keyword.get_lazy(opts, :illustrator, &Person.name/0)
@@ -75,7 +77,7 @@ defmodule Skrap.Factory.HostContent do
     }
   end
 
-  def manga_host(:chapter, opts \\ []) do
+  def manga_host(:chapter, opts) do
     random_date_fn = fn -> 1000 |> :rand.uniform() |> Date.backward() end
     name_prefix = "Capítulo "
 
