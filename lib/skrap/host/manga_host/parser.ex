@@ -58,6 +58,15 @@ defmodule Skrap.Host.MangaHost.Parser do
     Parser.validate_field({:name, name})
   end
 
+  def summary(html_tree) do
+    html_tree
+    |> Floki.find(".chapters > .cap")
+    |> Enum.map(&chapter/1)
+    |> Enum.reject(&match?({:error, _}, &1))
+    |> Enum.map(fn {:ok, chapter} -> chapter end)
+    |> Enum.reverse()
+  end
+
   def chapter(html_node) do
     with {:ok, added_at} <- get_added_at(html_node),
          {:ok, id} <- get_chapter_id(html_node),

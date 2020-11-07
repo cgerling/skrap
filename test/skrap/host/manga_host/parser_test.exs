@@ -39,4 +39,32 @@ defmodule Skrap.Host.MangaHost.ParserTest do
       assert {:error, {:added_at, :invalid_date_format}} == Parser.chapter(empty_html_tree)
     end
   end
+
+  describe "summary/1" do
+    test "returns a list of chapters" do
+      %{data: data, content: content} = HostContent.manga_host(:summary)
+
+      chapters = Parser.summary(content)
+      assert data.length == Enum.count(chapters)
+    end
+
+    test "returns a list of valid chapters when some chapters could not be parsed" do
+      invalid_chapter = {}
+      invalid_chapters = [invalid_chapter]
+      invalid_chapters_length = Enum.count(invalid_chapters)
+
+      %{data: data, content: content} =
+        HostContent.manga_host(:summary, chapters: invalid_chapters)
+
+      chapters = Parser.summary(content)
+
+      valid_chapters_length = data.length - invalid_chapters_length
+      assert valid_chapters_length == Enum.count(chapters)
+    end
+
+    test "returns an empty list when there no item could be parsed" do
+      empty_html_tree = []
+      assert [] == Parser.summary(empty_html_tree)
+    end
+  end
 end
