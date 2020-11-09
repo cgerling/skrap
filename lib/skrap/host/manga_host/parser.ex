@@ -5,6 +5,7 @@ defmodule Skrap.Host.MangaHost.Parser do
 
   @behaviour Parser
 
+  @impl Parser
   def manga(html_tree) do
     with {:ok, cover_url} <- get_cover_url(html_tree),
          {:ok, author_name} <- get_author_name(html_tree),
@@ -58,6 +59,7 @@ defmodule Skrap.Host.MangaHost.Parser do
     Parser.validate_field({:name, name})
   end
 
+  @impl Parser
   def summary(html_tree) do
     html_tree
     |> Floki.find(".chapters > .cap")
@@ -67,6 +69,7 @@ defmodule Skrap.Host.MangaHost.Parser do
     |> Enum.reverse()
   end
 
+  @impl Parser
   def chapter(html_node) do
     with {:ok, added_at} <- get_added_at(html_node),
          {:ok, id} <- get_chapter_id(html_node),
