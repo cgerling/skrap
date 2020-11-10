@@ -14,7 +14,7 @@ defmodule Skrap.Host.Parser do
 
   @callback manga(Floki.html_tree()) :: ok(Manga.t()) | error
   @callback summary(Floki.html_tree()) :: list(Chapter.t())
-  @callback chapter(Floki.html_node()) :: ok(Chapter.t()) | error
+  @callback chapter(binary() | Floki.html_node()) :: ok(Chapter.t()) | error
 
   @invalid_field_values [nil, ""]
 
