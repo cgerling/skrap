@@ -5,7 +5,7 @@ defmodule Skrap.Host.Parser do
   A parser is responsible for extracting information of a host.
   """
 
-  alias Skrap.Content.Manga
+  alias Skrap.Content.{Chapter, Manga}
 
   @type ok(value) :: {:ok, value}
   @type error(reason) :: {:error, reason}
@@ -13,6 +13,8 @@ defmodule Skrap.Host.Parser do
   @type maybe_string :: String.t() | nil
 
   @callback manga(Floki.html_tree()) :: ok(Manga.t()) | error
+  @callback summary(Floki.html_tree()) :: list(Chapter.t())
+  @callback chapter(binary() | Floki.html_node()) :: ok(Chapter.t()) | error
 
   @invalid_field_values [nil, ""]
 
